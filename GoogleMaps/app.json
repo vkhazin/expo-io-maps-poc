@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "GoogleMapsApp",
+    "slug": "GoogleMaps",
+    "privacy": "public",
+    "sdkVersion": "32.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sombath.GoogleMaps",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBrTO9KZkx4ewS45iNiegFbrbhe8N-5Gzg"
+      }
+    },
+    "android": {
+      "package": "com.sombath.GoogleMaps",
+      "config": {
+        "googleMaps": { "apiKey": "AIzaSyAgrwggkn9YLIVP1oGEBjJ0_OiWcKft27U"}
+      }
+    }
+  }
+}
