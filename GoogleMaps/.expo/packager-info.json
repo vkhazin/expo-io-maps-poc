@@ -1,10 +1,10 @@
 {
-  "packagerPort": 19001,
-  "packagerPid": 6692,
-  "devToolsPort": 19002,
   "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 16908,
   "expoServerNgrokUrl": "https://qm-fm5.sombathwise.googlemaps.exp.direct",
   "packagerNgrokUrl": "https://packager.qm-fm5.sombathwise.googlemaps.exp.direct",
-  "ngrokPid": 2072,
-  "webpackServerPort": null
+  "ngrokPid": 14504,
+  "webpackServerPort": null,
+  "devToolsPort": 19002
 }
