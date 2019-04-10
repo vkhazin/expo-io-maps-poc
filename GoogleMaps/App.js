@@ -4,9 +4,21 @@ import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-  };
+
+  constructor (props) {
+    super(props);
+
+    this.onUpdate = this.onUpdate.bind(this);
+    this.state = {
+      isLoadingComplete: false,
+      text: {}
+    };
+  }
+  onUpdate = (val) => {
+    this.setState({
+      text: val
+    });
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -21,7 +33,7 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <AppNavigator screenProps={{searchValue: this.state.text, onUpdate:this.onUpdate}}/>
         </View>
       );
     }
