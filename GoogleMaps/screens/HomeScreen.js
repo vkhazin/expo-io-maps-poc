@@ -4,13 +4,6 @@ import { MapView, Location, Permissions, Constants } from "expo";
 
 export default class HomeScreen extends React.Component {
 
-  values = [];
-  min_value = 0;
-  max_value = 0;
-  avg1_value = 0;
-  avg2_value = 0;
-  avg3_value = 0;
-  avg4_value = 0;
   radius = 250;
   old_latitudeDelta = 0;
   new_latitudeDelta = 0.0922;
@@ -92,15 +85,6 @@ export default class HomeScreen extends React.Component {
         isLoading: false,
         markers: data
       });
-      data.forEach(item => {
-        this.values.push(item.value);
-      });
-      this.min_value = Math.min.apply(null, this.values);
-      this.max_value = Math.max.apply(null, this.values);
-      this.avg1_value = this.min_value + (this.max_value - this.min_value) / 5;
-      this.avg2_value = this.min_value + (this.max_value - this.min_value) / 5 * 2;
-      this.avg3_value = this.min_value + (this.max_value - this.min_value) / 5 * 3;
-      this.avg4_value = this.min_value + (this.max_value - this.min_value) / 5 * 4;
     })
     .catch(error => console.error(error))
   }
@@ -112,24 +96,22 @@ export default class HomeScreen extends React.Component {
     });
     this.old_latitudeDelta = this.new_latitudeDelta;
     this.new_latitudeDelta = this.state.region.latitudeDelta;
-    this.radius = this.new_latitudeDelta / this.old_latitudeDelta * this.radius; 
-    if((this.state.region.latitudeDelta >= 0.09) && (this.state.region.latitudeDelta <= 150)){
-      this.setState({
-        precision: 6
-      });
-    }
-    else if((this.state.region.latitudeDelta >= 0.01) && (this.state.region.latitudeDelta <= 0.09)){
-      this.setState({
-        precision: 5
-      });
-    }
-    else{
-      this.setState({
-        precision: 4
-      });
-    }
+    this.radius = this.new_latitudeDelta / this.old_latitudeDelta * this.radius;
+  
+    this.getZoomLevel(center);
     this.fetchMarkerData();
     this.props.onUpdate(center);
+  }
+
+  getZoomLevel(region) {
+    let zoom = Math.round(Math.log(360 / region.longitudeDelta) / Math.LN2);
+    let precision = zoom / 2;
+    if (precision > 8) {
+      precision = 8;
+    }    
+    this.setState({
+      precision: precision
+    });
   }
 
   render() {
@@ -145,65 +127,40 @@ export default class HomeScreen extends React.Component {
             latitude: marker.location.lat,
             longitude: marker.location.lon
           };
-
-          // apply different colors based on values
-          if((this.min_value <= marker.value) && (marker.value <= this.avg1_value)){
+          
+          if(marker.valueRange == "low"){
             return (
               <MapView.Circle
                   key={index}
                   center={coords}
                   radius = {this.radius}
                   strokeWidth = { 1 }
-                  strokeColor = { 'rgb(57, 198, 57)' }
-                  fillColor = {'rgba(57, 198, 57, 0.5)'}
+                  strokeColor = { 'blue' }
+                  fillColor = {'blue'}
               />
             );
           }
-          else if((this.avg1_value <= marker.value) && (marker.value <= this.avg2_value)){
+          else if(marker.valueRange == "medium"){
             return (
               <MapView.Circle
                   key={index}
                   center={coords}
                   radius = {this.radius}
                   strokeWidth = { 1 }
-                  strokeColor = { 'rgb(255, 230, 153)' }
-                  fillColor = {'rgba(255, 230, 153, 0.5)'}
+                  strokeColor = { 'yellow' }
+                  fillColor = {'yellow'}
               />
             );
           }
-          else if((this.avg2_value <= marker.value) && (marker.value <= this.avg3_value)){
+          else if(marker.valueRange == "high"){
             return (
               <MapView.Circle
                   key={index}
                   center={coords}
                   radius = {this.radius}
                   strokeWidth = { 1 }
-                  strokeColor = { 'rgb(255, 191, 0)' }
-                  fillColor = {'rgba(255, 191, 0, 0.5)'}
-              />
-            );
-          }
-          else if((this.avg3_value <= marker.value) && (marker.value <= this.avg4_value)){
-            return (
-              <MapView.Circle
-                  key={index}
-                  center={coords}
-                  radius = {this.radius}
-                  strokeWidth = { 1 }
-                  strokeColor = { 'rgb(255, 51, 0)' }
-                  fillColor = {'rgba(255, 51, 0, 0.5)'}
-              />
-            );
-          }
-          else if((this.avg4_value <= marker.value) && (marker.value <= this.max_value)){
-            return (
-              <MapView.Circle
-                  key={index}
-                  center={coords}
-                  radius = {this.radius}
-                  strokeWidth = { 1 }
-                  strokeColor = { 'rgb(204, 0, 0)' }
-                  fillColor = {'rgba(204, 0, 0, 0.5)'}
+                  strokeColor = {'red'}
+                  fillColor = {'red'}
               />
             );
           }
